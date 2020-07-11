@@ -13,6 +13,11 @@ public class Main {
 		String pathToSampleCsv = "C:\\Users\\Nam Le\\Shopee_Code_League\\Week5\\delivery_orders_march_sample.csv";
 		String javaPathToSampleCsv = pathToSampleCsv.replace("\\", "/");
 		
+		String pathToSubmissionCsv = "C:\\Users\\Nam Le\\Shopee_Code_League\\Week5\\submission.csv";
+		String javaPathToSubmissionCsv = pathToSubmissionCsv.replace("\\", "/");
+		String pathToSampleSubmissionCsv = "C:\\Users\\Nam Le\\Shopee_Code_League\\Week5\\sample_submission.csv";
+		String javaPathToSampleSubmissionCsv = pathToSampleSubmissionCsv.replace("\\", "/");
+		
 		BufferedReader csvReader = new BufferedReader(new FileReader(javaPathToCsv));
 		FileWriter sampleCsvWriter = new FileWriter(javaPathToSampleCsv);
 		String rowString;
@@ -43,8 +48,20 @@ public class Main {
 		}
 		sampleCsvReader.close();
 		
+		
+		FileWriter sampleSubmissionCsvWriter = new FileWriter(javaPathToSampleSubmissionCsv);
+		sampleSubmissionCsvWriter.append("orderid,islate\n");
+
 		for (Order o : orders) {
 			System.out.println(o.toString());
+			sampleSubmissionCsvWriter.append(o.getOrderId().toString());
+			sampleSubmissionCsvWriter.append(",");
+			sampleSubmissionCsvWriter.append(o.isLate() ? "1" : "0");
+			sampleSubmissionCsvWriter.append("\n");
+			
 		}
+		
+		sampleSubmissionCsvWriter.flush();
+		sampleSubmissionCsvWriter.close();
 	}
 }
