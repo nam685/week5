@@ -1,15 +1,17 @@
 import java.sql.Timestamp;
 
 public class Order {
-	Timestamp orderId;
+	Long orderId;
 	Timestamp pick;
 	Timestamp firstDeliverAttempt;
 	Timestamp secondDeliverAttempt;
 	City buyerCity;
 	City sellerCity;
 	
-	public Order(String[] row) {
-		orderId = new Timestamp(Long.parseLong(row[0]));
+	public Order(String rowString) {
+		String[] row = rowString.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+		
+		orderId = Long.parseLong(row[0]);
 		pick = new Timestamp(Long.parseLong(row[1]));
 		firstDeliverAttempt = new Timestamp((long)Double.parseDouble(row[2]));
 		if (!row[3].isEmpty()) {
@@ -46,7 +48,7 @@ public class Order {
 		}
 	}
 
-	public Timestamp getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
@@ -71,6 +73,6 @@ public class Order {
 	}
 	
 	public String toString() {
-		return "" + orderId + pick + firstDeliverAttempt + secondDeliverAttempt + buyerCity + sellerCity;
+		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity;
 	}
 }

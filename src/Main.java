@@ -15,14 +15,14 @@ public class Main {
 		
 		BufferedReader csvReader = new BufferedReader(new FileReader(javaPathToCsv));
 		FileWriter sampleCsvWriter = new FileWriter(javaPathToSampleCsv);
-		String row;
+		String rowString;
 
 		String header = csvReader.readLine(); // throw this away
 		
 		int count = 0;
-		while ((row = csvReader.readLine()) != null && count < 10) {
+		while ((rowString = csvReader.readLine()) != null && count < 10) {
 			count++;
-			sampleCsvWriter.append(row);
+			sampleCsvWriter.append(rowString);
 			sampleCsvWriter.append("\n");
 		    // String[] data = row.split(",");
 		    // do something with the data
@@ -37,10 +37,8 @@ public class Main {
 		
 		List<Order> orders = new ArrayList<>();
 		
-		while ((row = sampleCsvReader.readLine()) != null) {
-		    String[] data = row.split(",");
-		    // do something with the data
-		    orders.add(new Order(data));
+		while ((rowString = sampleCsvReader.readLine()) != null) {
+		    orders.add(new Order(rowString));
 		    
 		}
 		sampleCsvReader.close();
