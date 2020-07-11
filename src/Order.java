@@ -7,6 +7,8 @@ public class Order {
 	Instant secondDeliverAttempt;
 	City buyerCity;
 	City sellerCity;
+	int firstDelay;
+	int SLA;
 	
 	public Order(String rowString) {
 		String[] row = rowString.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -46,6 +48,14 @@ public class Order {
 		} else {
 			sellerCity = City.Mindanao;
 		}
+		
+		if (buyerCity == City.Visayas || buyerCity == City.Mindanao || sellerCity == City.Visayas || sellerCity == City.Mindanao) {
+			SLA = 7;
+		} else if (buyerCity == City.Luzon || sellerCity == City.Luzon) {
+			SLA = 5;
+		} else {
+			SLA = 3;
+		}
 	}
 
 	public Long getOrderId() {
@@ -73,6 +83,6 @@ public class Order {
 	}
 	
 	public String toString() {
-		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity;
+		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity + "    " + SLA;
 	}
 }
