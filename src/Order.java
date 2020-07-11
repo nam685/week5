@@ -1,23 +1,28 @@
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 public class Order {
 	Long orderId;
-	Instant pick;
-	Instant firstDeliverAttempt;
-	Instant secondDeliverAttempt;
+	LocalDate pick;
+	LocalDate firstDeliverAttempt;
+	LocalDate secondDeliverAttempt;
 	City buyerCity;
 	City sellerCity;
-	int firstDelay;
-	int SLA;
+	long firstDelay = -1;
+	long secondDelay = -1;
+	long SLA = -1;
+	boolean late;
 	
 	public Order(String rowString) {
 		String[] row = rowString.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 		
 		orderId = Long.parseLong(row[0]);
-		pick = Instant.ofEpochSecond(Long.parseLong(row[1]));
-		firstDeliverAttempt = Instant.ofEpochSecond((long)Double.parseDouble(row[2]));
+		pick = LocalDate.ofInstant(Instant.ofEpochSecond(Long.parseLong(row[1])), ZoneId.of("GMT+8"));
+		firstDeliverAttempt = LocalDate.ofInstant(Instant.ofEpochSecond((long)Double.parseDouble(row[2])), ZoneId.of("GMT+8"));
 		if (!row[3].isEmpty()) {
-			secondDeliverAttempt = Instant.ofEpochSecond((long)Double.parseDouble(row[3]));
+			secondDeliverAttempt = LocalDate.ofInstant(Instant.ofEpochSecond((long)Double.parseDouble(row[3])), ZoneId.of("GMT+8"));
 		}
 		
 		String buyerAddress = row[4].toLowerCase();
@@ -56,21 +61,35 @@ public class Order {
 		} else {
 			SLA = 3;
 		}
+		
+		late = examine();
+	}
+
+	private boolean examine() {
+		firstDelay = ChronoUnit.DAYS.between(pick, firstDeliverAttempt);
+		if (secondDeliverAttempt != null) {
+			secondDelay = ChronoUnit.DAYS.between(firstDeliverAttempt, secondDeliverAttempt);
+		}
+		if (secondDelay == -1) {
+			return firstDelay <= SLA;
+		} else {
+			return firstDelay <= SLA && secondDelay <= 3;
+		}
 	}
 
 	public Long getOrderId() {
 		return orderId;
 	}
 
-	public Instant getPick() {
+	public LocalDate getPick() {
 		return pick;
 	}
 
-	public Instant getFirstDeliverAttempt() {
+	public LocalDate getFirstDeliverAttempt() {
 		return firstDeliverAttempt;
 	}
 
-	public Instant getSecondDeliverAttempt() {
+	public LocalDate getSecondDeliverAttempt() {
 		return secondDeliverAttempt;
 	}
 
@@ -83,6 +102,16 @@ public class Order {
 	}
 	
 	public String toString() {
-		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity + "    " + SLA;
+		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity + "    " + SLA + "    " + firstDelay + "    " + secondDelay + " is in time = " + isLate();
 	}
+
+	public long getSLA() {
+		return SLA;
+	}
+
+	public boolean isLate() {
+		return late;
+	}
+	
+	
 }
