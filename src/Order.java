@@ -1,10 +1,10 @@
-import java.sql.Timestamp;
+import java.time.Instant;
 
 public class Order {
 	Long orderId;
-	Timestamp pick;
-	Timestamp firstDeliverAttempt;
-	Timestamp secondDeliverAttempt;
+	Instant pick;
+	Instant firstDeliverAttempt;
+	Instant secondDeliverAttempt;
 	City buyerCity;
 	City sellerCity;
 	
@@ -12,10 +12,10 @@ public class Order {
 		String[] row = rowString.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 		
 		orderId = Long.parseLong(row[0]);
-		pick = new Timestamp(Long.parseLong(row[1]));
-		firstDeliverAttempt = new Timestamp((long)Double.parseDouble(row[2]));
+		pick = Instant.ofEpochSecond(Long.parseLong(row[1]));
+		firstDeliverAttempt = Instant.ofEpochSecond((long)Double.parseDouble(row[2]));
 		if (!row[3].isEmpty()) {
-			secondDeliverAttempt = new Timestamp((long)Double.parseDouble(row[3]));
+			secondDeliverAttempt = Instant.ofEpochSecond((long)Double.parseDouble(row[3]));
 		}
 		
 		String buyerAddress = row[4].toLowerCase();
@@ -52,15 +52,15 @@ public class Order {
 		return orderId;
 	}
 
-	public Timestamp getPick() {
+	public Instant getPick() {
 		return pick;
 	}
 
-	public Timestamp getFirstDeliverAttempt() {
+	public Instant getFirstDeliverAttempt() {
 		return firstDeliverAttempt;
 	}
 
-	public Timestamp getSecondDeliverAttempt() {
+	public Instant getSecondDeliverAttempt() {
 		return secondDeliverAttempt;
 	}
 
