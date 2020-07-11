@@ -102,7 +102,7 @@ public class Order {
 	}
 	
 	public String toString() {
-		return "" + orderId + "   "+ pick + "   "+ firstDeliverAttempt + "   "+ secondDeliverAttempt + "   "+ buyerCity + "   "+ sellerCity + "    " + SLA + "    " + firstDelay + "    " + secondDelay + " is in time = " + isLate();
+		return "OrderID " + orderId + " Pick "+ pick + " FirstAttempt "+ firstDeliverAttempt + " SecondAttempt "+ secondDeliverAttempt + " BuyerCity "+ buyerCity + " SellerCity "+ sellerCity + " SLA " + SLA + " FirstDelay " + firstDelay + " SecondDelay " + secondDelay + " Is in time = " + isLate();
 	}
 
 	public long getSLA() {
